@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/nota")
+@RequestMapping(value = "/notafiscal", produces = {"application/json"})
 public class NotaController {
 
     private final NotaModelRepository notaModelRepository;
@@ -20,8 +23,14 @@ public class NotaController {
     }
 
 
-    @GetMapping("/{nota}")
-    public ResponseEntity<Object> buscaNota(@PathVariable (value = "nota") UUID nota){
+    @GetMapping
+    public ResponseEntity<List<NotaModel>> listarNota() {
+        return ResponseEntity.status(HttpStatus.OK).body(servicoRepository.findAll());
+    }
+
+
+    @GetMapping("/{numeronota}")
+    public ResponseEntity<Object> buscaNota(@PathVariable (value = "nota") String nota){
         Optional<NotaModel> notaBuscada = notaModelRepository.findById(nota);
 
         if (notaBuscada.isEmpty()) {
@@ -42,9 +51,9 @@ public class NotaController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(notaModelRepository.save(notaModel));
     }
-
-    @PutMapping("/{nota}")
-    public ResponseEntity<Object> atualizarNota(@PathVariable Long nota, @RequestBody @Valid NotaDto dadosAtualizados) {
+/*
+    @PutMapping("/{numeronota}")
+    public ResponseEntity<Object> atualizarNota(@PathVariable String nota, @RequestBody @Valid NotaDto dadosAtualizados) {
         Optional<NotaModel> notaBuscada = notaModelRepository.findById(nota);
 
         if (notaBuscada.isEmpty()) {
@@ -56,9 +65,9 @@ public class NotaController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(notaModelRepository.save(notaModel));
     }
-
-    @DeleteMapping("/{nota}")
-    public ResponseEntity<Object> excluirNota(@PathVariable (value = "nota") UUID nota) {
+*/
+    @DeleteMapping("/{numeronota}")
+    public ResponseEntity<Object> excluirNota(@PathVariable (value = "nota") String nota) {
         Optional<NotaModel> notaBuscada = notaModelRepository.findById(nota);
 
         if (notaBuscada.isEmpty()) {
@@ -69,8 +78,8 @@ public class NotaController {
         return ResponseEntity.status(HttpStatus.OK).body("Nota excluída com sucesso");
     }
 
-    @PutMapping("/{nota}")
-    public ResponseEntity<Object> atualizarNota(@PathVariable Long nota, @RequestBody @Valid NotaDto dadosAtualizados) {
+    @PutMapping("/{numeronota}")
+    public ResponseEntity<Object> atualizarNota(@PathVariable String nota, @RequestBody @Valid NotaDto dadosAtualizados) {
         Optional<NotaModel> notaBuscada = notaModelRepository.findById(nota);
 
         if (notaBuscada.isEmpty()) {
